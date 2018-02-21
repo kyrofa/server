@@ -374,12 +374,13 @@ class ThemingController extends Controller {
 	 * @return FileDisplayResponse|NotFoundResponse
 	 */
 	public function getStylesheet() {
-		$appPath = substr(\OC::$server->getAppManager()->getAppPath('theming'), strlen(\OC::$SERVERROOT) + 1);
+		$appPath = \OC::$server->getAppManager()->getAppPath('theming');
+
 		/* SCSSCacher is required here
 		 * We cannot rely on automatic caching done by \OC_Util::addStyle,
 		 * since we need to add the cacheBuster value to the url
 		 */
-		$cssCached = $this->scssCacher->process(\OC::$SERVERROOT, $appPath . '/css/theming.scss', 'theming');
+		$cssCached = $this->scssCacher->process($appPath, 'css/theming.scss', 'theming');
 		if(!$cssCached) {
 			return new NotFoundResponse();
 		}
