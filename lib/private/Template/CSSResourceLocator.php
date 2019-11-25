@@ -125,26 +125,7 @@ class CSSResourceLocator extends ResourceLocator {
 		if (!$scss) {
 			parent::append($root, $file, $webRoot, $throw);
 		} else {
-			if (!$webRoot) {
-				$webRoot = $this->findWebRoot($root);
-
-				if ($webRoot === null) {
-					$webRoot = '';
-					$this->logger->error('ResourceLocator can not find a web root (root: {root}, file: {file}, webRoot: {webRoot}, throw: {throw})', [
-						'app' => 'lib',
-						'root' => $root,
-						'file' => $file,
-						'webRoot' => $webRoot,
-						'throw' => $throw ? 'true' : 'false'
-					]);
-
-					if ($throw && $root === '/') {
-						throw new ResourceNotFoundException($file, $webRoot);
-					}
-				}
-			}
-
-			$this->resources[] = array($webRoot? : \OC::$WEBROOT, $webRoot, $file);
+			$this->resources[] = array(\OC::$WEBROOT, \OC::$WEBROOT, $file);
 		}
 	}
 }

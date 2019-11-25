@@ -24,6 +24,7 @@ declare (strict_types = 1);
 
 namespace OC\Core\Controller;
 
+use OCP\App\AppPathNotFoundException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataDisplayResponse;
@@ -96,13 +97,13 @@ class SvgController extends Controller {
 			return $this->getSvg($path, $color, $fileName);
 		}
 
-		$appRootPath = $this->appManager->getAppPath($app);
-		$appPath = substr($appRootPath, strlen($this->serverRoot));
-
-		if (!$appPath) {
+		try {
+			$appPath = $this->appManager->getAppPath($app);
+		} catch (AppPathNotFoundException $e) {
 			return new NotFoundResponse();
 		}
-		$path = $this->serverRoot . $appPath ."/img/$fileName.svg";
+
+		$path = $appPath . "/img/$fileName.svg";
 		return $this->getSvg($path, $color, $fileName);
 	}
 
